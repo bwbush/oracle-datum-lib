@@ -8,25 +8,24 @@ module Test.Utils where
 import qualified PlutusTx
 import qualified PlutusTx.Builtins as BI
 import qualified UntypedPlutusCore as UPLC
-import qualified UntypedPlutusCore.Check.Scope as UPLC
 import qualified UntypedPlutusCore.Evaluation.Machine.Cek as UPLC
-import qualified PlutusCore as PLC
+import           PlutusCore.Evaluation.Machine.ExBudgetingDefaults (defaultCekParameters)
 import           Text.Hex
-import           Plutus.V1.Ledger.Api
+import           PlutusLedgerApi.V2
 import           Test.Tasty.HUnit
 import           PlutusCore.Evaluation.Machine.Exception
-import           Plutus.V1.Ledger.Scripts
+import           PlutusTx (CompiledCode, getPlc)
 import           Utils (insertMap)
 
-assertValidator :: Script -> Assertion
+assertValidator :: CompiledCode a -> Assertion
 assertValidator = uncurry assertBool . either (const ("", True)) ((, False) . show) . evaluateScriptPure
 
-evaluateScriptPure :: Script -> Either [Text] [Text]
+evaluateScriptPure :: CompiledCode a -> Either [Text] [Text]
 evaluateScriptPure s =
-    let namedT = UPLC.termMapNames UPLC.fakeNameDeBruijn $ UPLC._progTerm $ unScript s
+    let namedT = UPLC._progTerm $ getPlc s
     in case UPLC.checkScope @UPLC.FreeVariableError namedT of
         Left _ -> Right []
-        _ -> let (result, _, logOut) = UPLC.runCekDeBruijn PLC.defaultCekParameters UPLC.tallying UPLC.logEmitter namedT
+        _ -> let (result, _, logOut) = UPLC.runCekDeBruijn defaultCekParameters UPLC.tallying UPLC.logEmitter namedT
             in case result of
                  Right _ -> Left logOut
                  Left (ErrorWithCause _ _) -> Right logOut

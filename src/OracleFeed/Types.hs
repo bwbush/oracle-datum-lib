@@ -5,7 +5,7 @@ import qualified Prelude as HP
 
 import PlutusTx.Prelude (Maybe(..), (.), Eq(..), Bool)
 import PlutusTx.Builtins (BuiltinData)
-import Plutus.V2.Ledger.Api (ToData(..), FromData(..), UnsafeFromData(..))
+import PlutusLedgerApi.V2 (ToData(..), FromData(..), UnsafeFromData(..))
 
 newtype OracleFeed = OracleFeed BuiltinData
     deriving (HP.Eq, HP.Show)

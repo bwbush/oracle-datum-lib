@@ -76,8 +76,8 @@ gettersValidator = if and results then () else traceError "Tests Failed"
       Just bd -> bd
 
 
-testGetters :: Script
-testGetters = fromCompiledCode $$(compile [|| gettersValidator ||])
+testGetters :: CompiledCode
+testGetters = $$(compile [|| gettersValidator ||])
 
 --------------------------------------------------------------------------------
 

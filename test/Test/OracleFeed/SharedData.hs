@@ -10,9 +10,8 @@ module Test.OracleFeed.SharedData (tests) where
 
 import Test.Tasty
 import Test.Tasty.HUnit
-import PlutusTx
+import PlutusTx (CompiledCode, compile)
 import PlutusTx.Prelude
-import Plutus.V1.Ledger.Scripts hiding (evaluateScript)
 import Test.Utils
 import OracleFeed
 
@@ -41,8 +40,8 @@ gettersValidator = if testPriceMapGet sharedData
         Nothing -> traceError "Failed to find SharedData"
         Just bd -> bd
 
-testGetters :: Script
-testGetters = fromCompiledCode $$(compile [|| gettersValidator ||])
+testGetters :: CompiledCode ()
+testGetters = $$(compile [|| gettersValidator ||])
 
 --------------------------------------------------------------------------------
 
@@ -62,5 +61,5 @@ settersValidator = if testSetPriceMap sharedData
     sharedData :: SharedData
     sharedData = setSharedPriceData (setTimestamp 5555 emptySharedPriceMap) emptySharedData
 
-testSetters :: Script
-testSetters = fromCompiledCode $$(compile [|| settersValidator ||])
+testSetters :: CompiledCode ()
+testSetters = $$(compile [|| settersValidator ||])

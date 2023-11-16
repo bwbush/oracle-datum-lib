@@ -16,9 +16,8 @@ module OracleFeed.ExtendedData
 import OracleFeed.Types
 import PlutusTx.Builtins
 import Utils ( insertConstrSMap, lookupConstrSMap, failIfNotStandard )
-import Plutus.V1.Ledger.Api (ToData(toBuiltinData))
+import PlutusLedgerApi.V2 (ToData(toBuiltinData), FromData)
 import PlutusTx.Prelude
-import Plutus.V2.Ledger.Api (FromData)
 
 {-# INLINABLE emptyExtendedData #-}
 emptyExtendedData :: ExtendedData

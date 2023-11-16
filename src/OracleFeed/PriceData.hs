@@ -28,7 +28,7 @@ module OracleFeed.PriceData
   ) where
 
 import PlutusTx.Prelude
-import Plutus.V1.Ledger.Api ( ToData(..)
+import PlutusLedgerApi.V2 ( ToData(..)
                             , POSIXTime
                             , CurrencySymbol
                             , TokenName
